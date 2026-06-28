@@ -8629,10 +8629,20 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
---// Warning/Welcome Box com Rolagem de Texto \\--
+--// Warning/Welcome Box \\--
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+
+-- Sistema de Saudação Baseado no Horário Local
+local currentHour = os.date("*t").hour -- Pega a hora local do dispositivo do jogador
+local greeting = "Good Evening" -- Padrão (Noite)
+
+if currentHour >= 5 and currentHour < 12 then
+    greeting = "Good Morning"
+elseif currentHour >= 12 and currentHour < 18 then
+    greeting = "Good Afternoon"
+end
 
 local WarningBoxHolder = New("Frame", {
     AutomaticSize = Enum.AutomaticSize.Y,
@@ -8644,24 +8654,24 @@ local WarningBoxHolder = New("Frame", {
 })
 
 local WarningBox = New("Frame", {
-    BackgroundColor3 = Color3.fromRGB(15, 15, 15), 
+    BackgroundColor3 = Color3.fromRGB(15, 15, 15), -- Fundo escuro (#0f0f0f)
     Position = UDim2.fromOffset(2, 0),
-    Size = UDim2.new(1, -5, 0, 110), 
+    Size = UDim2.new(1, -5, 0, 110), -- Altura ajustada para o design da foto
     Parent = WarningBoxHolder,
 })
 
 New("UICorner", {
-    CornerRadius = UDim.new(0, 10), 
+    CornerRadius = UDim.new(0, 10), -- Bordas mais arredondadas como na foto
     Parent = WarningBox,
 })
 
 New("UIStroke", {
     Thickness = 1,
-    Color = Color3.fromRGB(30, 30, 30), 
+    Color = Color3.fromRGB(30, 30, 30), -- Linha sutil de contorno
     Parent = WarningBox
 })
 
--- CONTAINER DO AVATAR
+-- CONTAINER DO AVATAR (Borda interna que envolve a foto na foto)
 local AvatarContainer = New("Frame", {
     BackgroundColor3 = Color3.fromRGB(22, 22, 22),
     Position = UDim2.fromOffset(15, 15),
@@ -8680,7 +8690,7 @@ New("UIStroke", {
     Parent = AvatarContainer
 })
 
--- AVATAR
+-- AVATAR (Foto do jogador)
 local userId = LocalPlayer.UserId
 local thumb = Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
 
@@ -8697,38 +8707,34 @@ New("UICorner", {
     Parent = Avatar
 })
 
--- SLIDER / SCROLLING FRAME INTERNO (Para subir e descer o texto)
-local TextScrollContainer = New("ScrollingFrame", {
+-- TEXTOS (Alinhados perfeitamente ao lado do avatar)
+local TextContainer = New("Frame", {
     BackgroundTransparency = 1,
-    BorderSizePixel = 0,
     Position = UDim2.fromOffset(110, 15),
     Size = UDim2.new(1, -125, 1, -30),
-    CanvasSize = UDim2.new(0, 0, 0, 140), -- Tamanho do conteúdo interno (ajuste se colocar mais texto)
-    ScrollBarThickness = 2, -- Barra bem fina para não quebrar o visual da foto
-    ScrollBarImageColor3 = Color3.fromRGB(200, 80, 255), -- Cor combinando com o tema
-    ScrollingDirection = Enum.ScrollingDirection.Y, -- Move apenas para cima e para baixo
     Parent = WarningBox,
 })
 
--- Título (Dentro do Scroll)
+-- Título: [Saudação], @Jogador! Welcome To FCX Script
 local Title = New("TextLabel", {
     BackgroundTransparency = 1,
     Size = UDim2.new(1, 0, 0, 22),
-    Text = "Welcome To <font color='rgb(200, 80, 255)'>FCX Script</font>, @" .. LocalPlayer.Name .. "!",
+    -- Exemplo de resultado: "Good Afternoon, @Player! Welcome To FCX Script"
+    Text = greeting .. ", @" .. LocalPlayer.Name .. "! Welcome To <font color='rgb(200, 80, 255)'>FCX Script</font>",
     TextColor3 = Color3.fromRGB(255, 255, 255),
-    TextSize = 15,
-    RichText = true, 
+    TextSize = 14, -- Reduzido levemente para 14 caso o nome do jogador + saudação fique muito longo
+    RichText = true, -- Ativa o uso de cores diferentes na mesma string (tags HTML)
     Font = Enum.Font.GothamBold,
     TextXAlignment = Enum.TextXAlignment.Left,
-    Parent = TextScrollContainer
+    Parent = TextContainer
 })
 
--- Descrição / Mensagens (Dentro do Scroll)
+-- Informações / Descrição no formato de lista da foto
 local Desc = New("TextLabel", {
     BackgroundTransparency = 1,
-    Position = UDim2.fromOffset(0, 28),
-    Size = UDim2.new(1, 0, 0, 100), -- Altura fixa para permitir o scroll se o texto crescer
-    Text = "  • Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n  • Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n  • Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>\n  • Extra Info: <font color='rgb(200, 80, 255)'>Scroll ativado!</font>",
+    Position = UDim2.fromOffset(0, 25),
+    Size = UDim2.new(1, 0, 1, -25),
+    Text = "• Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n• Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n• Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>",
     TextColor3 = Color3.fromRGB(180, 180, 180),
     TextSize = 13,
     RichText = true,
@@ -8736,7 +8742,7 @@ local Desc = New("TextLabel", {
     TextWrapped = true,
     TextXAlignment = Enum.TextXAlignment.Left,
     TextYAlignment = Enum.TextYAlignment.Top,
-    Parent = TextScrollContainer
+    Parent = TextContainer
 })
 
         --// Tab Table \\--
