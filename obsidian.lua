@@ -8629,11 +8629,9 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
---// Warning/Welcome Box com Sistema de Arrastar \\--
+--// Warning/Welcome Box com Rolagem de Texto \\--
 
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
 local WarningBoxHolder = New("Frame", {
@@ -8699,15 +8697,20 @@ New("UICorner", {
     Parent = Avatar
 })
 
--- CONTAINER DOS TEXTOS
-local TextContainer = New("Frame", {
+-- SLIDER / SCROLLING FRAME INTERNO (Para subir e descer o texto)
+local TextScrollContainer = New("ScrollingFrame", {
     BackgroundTransparency = 1,
+    BorderSizePixel = 0,
     Position = UDim2.fromOffset(110, 15),
     Size = UDim2.new(1, -125, 1, -30),
+    CanvasSize = UDim2.new(0, 0, 0, 140), -- Tamanho do conteúdo interno (ajuste se colocar mais texto)
+    ScrollBarThickness = 2, -- Barra bem fina para não quebrar o visual da foto
+    ScrollBarImageColor3 = Color3.fromRGB(200, 80, 255), -- Cor combinando com o tema
+    ScrollingDirection = Enum.ScrollingDirection.Y, -- Move apenas para cima e para baixo
     Parent = WarningBox,
 })
 
--- Título
+-- Título (Dentro do Scroll)
 local Title = New("TextLabel", {
     BackgroundTransparency = 1,
     Size = UDim2.new(1, 0, 0, 22),
@@ -8717,15 +8720,15 @@ local Title = New("TextLabel", {
     RichText = true, 
     Font = Enum.Font.GothamBold,
     TextXAlignment = Enum.TextXAlignment.Left,
-    Parent = TextContainer
+    Parent = TextScrollContainer
 })
 
--- Descrição com espaçamentos da foto
+-- Descrição / Mensagens (Dentro do Scroll)
 local Desc = New("TextLabel", {
     BackgroundTransparency = 1,
     Position = UDim2.fromOffset(0, 28),
-    Size = UDim2.new(1, 0, 1, -28),
-    Text = "  • Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n  • Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n  • Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>",
+    Size = UDim2.new(1, 0, 0, 100), -- Altura fixa para permitir o scroll se o texto crescer
+    Text = "  • Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n  • Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n  • Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>\n  • Extra Info: <font color='rgb(200, 80, 255)'>Scroll ativado!</font>",
     TextColor3 = Color3.fromRGB(180, 180, 180),
     TextSize = 13,
     RichText = true,
@@ -8733,49 +8736,8 @@ local Desc = New("TextLabel", {
     TextWrapped = true,
     TextXAlignment = Enum.TextXAlignment.Left,
     TextYAlignment = Enum.TextYAlignment.Top,
-    Parent = TextContainer
+    Parent = TextScrollContainer
 })
-
-
---// SISTEMA DE ARRASTAR (DRAGGABLE) \\--
-local dragging
-local dragInput
-local dragStart
-local startPos
-
-local function update(input)
-    local delta = input.Position - dragStart
-    local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    
-    -- Transição suave ao arrastar (suaviza o movimento)
-    TweenService:Create(WarningBox, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = targetPos}):Play()
-end
-
-WarningBox.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = WarningBox.Position
-        
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-WarningBox.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        update(input)
-    end
-end)
 
         --// Tab Table \\--
         local Tab = {
