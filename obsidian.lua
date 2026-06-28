@@ -8657,7 +8657,7 @@ function Library:CreateWindow(WindowInfo)
 
 
         local WarningBox = New("Frame", {
-            BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+            BackgroundColor3 = Color3.fromRGB(15, 15, 15), -- #0f0f0f
             Position = UDim2.fromOffset(2, 0),
             Size = UDim2.new(1, -5, 0, 120),
             Parent = WarningBoxHolder,
@@ -8665,24 +8665,25 @@ function Library:CreateWindow(WindowInfo)
 
 
         New("UICorner", {
-            CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+            CornerRadius = UDim.new(0, 6),
             Parent = WarningBox,
         })
 
 
         New("UIStroke", {
             Thickness = 1,
-            Color = Color3.fromRGB(30, 30, 30),
+            Color = Color3.fromRGB(10, 10, 10),
             Parent = WarningBox
         })
 
 
+        -- SCROLL (agora empurrado pra direita por causa do avatar)
         local Scroll = New("ScrollingFrame", {
             BackgroundTransparency = 1,
             BorderSizePixel = 0,
-            Size = UDim2.new(1, -60, 1, -10),
-            Position = UDim2.fromOffset(5, 5),
-            CanvasSize = UDim2.new(0, 0, 0, 200),
+            Size = UDim2.new(1, -70, 1, -10),
+            Position = UDim2.fromOffset(65, 5),
+            CanvasSize = UDim2.new(0, 0, 0, 220),
             ScrollBarThickness = 3,
             ScrollingDirection = Enum.ScrollingDirection.Y,
             Parent = WarningBox
@@ -8703,7 +8704,7 @@ function Library:CreateWindow(WindowInfo)
         local Desc = New("TextLabel", {
             BackgroundTransparency = 1,
             Position = UDim2.fromOffset(0, 25),
-            Size = UDim2.new(1, 0, 0, 150),
+            Size = UDim2.new(1, 0, 0, 180),
             Text = [[
 
 • This script is currently in beta. Please report issues in our Discord.
@@ -8722,28 +8723,31 @@ function Library:CreateWindow(WindowInfo)
         })
 
 
+        -- AVATAR (lado esquerdo)
         local userId = LocalPlayer.UserId
         local thumb = Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
 
 
         local Avatar = New("ImageLabel", {
             Size = UDim2.fromOffset(50, 50),
-            Position = UDim2.new(1, -55, 0, 5),
+            Position = UDim2.fromOffset(8, 8),
             BackgroundTransparency = 1,
             Image = thumb,
             Parent = WarningBox
         })
 
 
-        New("UIStroke", {
-            Thickness = 1,
-            Color = Color3.fromRGB(0, 0, 0),
+        -- mais quadrado (leve arredondado)
+        New("UICorner", {
+            CornerRadius = UDim.new(0, 6),
             Parent = Avatar
         })
 
 
-        New("UICorner", {
-            CornerRadius = UDim.new(1, 0),
+        -- outline mais escura que o fundo
+        New("UIStroke", {
+            Thickness = 1,
+            Color = Color3.fromRGB(5, 5, 5),
             Parent = Avatar
         })
 
