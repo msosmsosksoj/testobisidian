@@ -10463,18 +10463,17 @@ local Desc = New("TextLabel", {
     end
 
 if Library.IsMobile then
-    local ToggleButton = Library:AddDraggableButton(
-        "", -- sem texto
-        function()
-            Library:Toggle()
-        end,
-        true,
-        true,
-        {
-            Icon = "rbxassetid://7733658504", -- exemplo de ícone (menu)
-            IconPosition = "Left"
-        }
-    )
+    local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+
+    local Button = Instance.new("ImageButton")
+    Button.Parent = ScreenGui
+    Button.Size = UDim2.new(0, 50, 0, 50)
+    Button.Position = UDim2.new(0, 20, 0.5, -25)
+    Button.Image = "rbxassetid://7733658504"
+
+    Button.MouseButton1Click:Connect(function()
+        Library:Toggle()
+    end)
 end
 
         local LockButton = Library:AddDraggableButton("Lock", function(self)
