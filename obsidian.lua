@@ -8629,9 +8629,11 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
---// Warning/Welcome Box \\--
+--// Warning/Welcome Box com Sistema de Arrastar \\--
 
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
 local WarningBoxHolder = New("Frame", {
@@ -8718,10 +8720,10 @@ local Title = New("TextLabel", {
     Parent = TextContainer
 })
 
--- Descrição com os recuos (espaços) no início de cada linha igual à foto
+-- Descrição com espaçamentos da foto
 local Desc = New("TextLabel", {
     BackgroundTransparency = 1,
-    Position = UDim2.fromOffset(0, 28), -- Abaixado levemente para dar mais respiro ao título
+    Position = UDim2.fromOffset(0, 28),
     Size = UDim2.new(1, 0, 1, -28),
     Text = "  • Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n  • Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n  • Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>",
     TextColor3 = Color3.fromRGB(180, 180, 180),
@@ -8733,6 +8735,47 @@ local Desc = New("TextLabel", {
     TextYAlignment = Enum.TextYAlignment.Top,
     Parent = TextContainer
 })
+
+
+--// SISTEMA DE ARRASTAR (DRAGGABLE) \\--
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    
+    -- Transição suave ao arrastar (suaviza o movimento)
+    TweenService:Create(WarningBox, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+end
+
+WarningBox.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = WarningBox.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+WarningBox.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
 
         --// Tab Table \\--
         local Tab = {
