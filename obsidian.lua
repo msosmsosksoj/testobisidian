@@ -10462,11 +10462,10 @@ local Desc = New("TextLabel", {
         task.spawn(Library.Toggle)
     end
 
-if Library.IsMobile then
-    local ToggleButton = Library:AddButton("Toggle", function()
-        Library:Toggle()
-    end)
-end
+if Library.IsMobile then  
+    local ToggleButton = Library:AddDraggableButton("Toggle", function()  
+        Library:Toggle()  
+    end, true, true)
 
         local LockButton = Library:AddDraggableButton("Lock", function(self)
             Library.CantDragForced = not Library.CantDragForced
