@@ -10463,9 +10463,19 @@ local Desc = New("TextLabel", {
     end
 
     if Library.IsMobile then
-        local ToggleButton = Library:AddDraggableButton("Toggle", function()
-            Library:Toggle()
-        end, true, true)
+        local ToggleButton = Library:AddDraggableButton(
+            "", -- sem texto
+            function()
+                Library:Toggle()
+            end,
+            true,
+            true,
+            {
+                Icon = "rbxassetid://7733658504", -- exemplo de ícone (menu)
+                IconPosition = "Left"
+            }
+        )
+    end
 
         local LockButton = Library:AddDraggableButton("Lock", function(self)
             Library.CantDragForced = not Library.CantDragForced
