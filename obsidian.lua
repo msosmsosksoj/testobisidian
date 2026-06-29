@@ -316,7 +316,7 @@ local Templates = {
         Footer = "No Footer",
 
         Position = UDim2.fromOffset(6, 6),
-        Size = UDim2.fromOffset(450, 590),
+        Size = UDim2.fromOffset(650, 600),
         IconSize = UDim2.fromOffset(30, 30),
 
         AutoShow = true,
@@ -8630,14 +8630,11 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
---// Warning/Welcome Box \\--
-
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Sistema de Saudação Baseado no Horário Local
-local currentHour = os.date("*t").hour -- Pega a hora local do dispositivo do jogador
-local greeting = "Good Evening" -- Padrão (Noite)
+local currentHour = os.date("*t").hour
+local greeting = "Good Evening"
 
 if currentHour >= 5 and currentHour < 12 then
     greeting = "Good Morning"
@@ -8645,106 +8642,70 @@ elseif currentHour >= 12 and currentHour < 18 then
     greeting = "Good Afternoon"
 end
 
-local WarningBoxHolder = New("Frame", {
-    AutomaticSize = Enum.AutomaticSize.Y,
-    BackgroundTransparency = 1,
-    Position = UDim2.fromOffset(0, 7),
-    Size = UDim2.fromScale(1, 0),
-    Visible = true,
-    Parent = TabContainer,
-})
+local WelcomeGroup = Tabs.Main:AddLeftGroupbox("Welcome", "sparkles")
 
-local WarningBox = New("Frame", {
-    BackgroundColor3 = Color3.fromRGB(15, 15, 15), -- Fundo escuro (#0f0f0f)
-    Position = UDim2.fromOffset(2, 0),
-    Size = UDim2.new(1, -5, 0, 110), -- Altura ajustada para o design da foto
-    Parent = WarningBoxHolder,
-})
+local WarningBox = Instance.new("Frame")
+WarningBox.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+WarningBox.Size = UDim2.new(1, 0, 0, 110)
+WarningBox.Parent = WelcomeGroup.UIElements or WelcomeGroup
 
-New("UICorner", {
-    CornerRadius = UDim.new(0, 10), -- Bordas mais arredondadas como na foto
-    Parent = WarningBox,
-})
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 10)
+Corner.Parent = WarningBox
 
-New("UIStroke", {
-    Thickness = 1,
-    Color = Color3.fromRGB(30, 30, 30), -- Linha sutil de contorno
-    Parent = WarningBox
-})
+local Stroke = Instance.new("UIStroke")
+Stroke.Thickness = 1
+Stroke.Color = Color3.fromRGB(30, 30, 30)
+Stroke.Parent = WarningBox
 
--- CONTAINER DO AVATAR (Borda interna que envolve a foto na foto)
-local AvatarContainer = New("Frame", {
-    BackgroundColor3 = Color3.fromRGB(22, 22, 22),
-    Position = UDim2.fromOffset(15, 15),
-    Size = UDim2.fromOffset(80, 80),
-    Parent = WarningBox,
-})
+local AvatarContainer = Instance.new("Frame")
+AvatarContainer.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+AvatarContainer.Position = UDim2.fromOffset(15, 15)
+AvatarContainer.Size = UDim2.fromOffset(80, 80)
+AvatarContainer.Parent = WarningBox
 
-New("UICorner", {
-    CornerRadius = UDim.new(0, 12),
-    Parent = AvatarContainer,
-})
+Instance.new("UICorner", AvatarContainer).CornerRadius = UDim.new(0, 12)
 
-New("UIStroke", {
-    Thickness = 1,
-    Color = Color3.fromRGB(45, 45, 45),
-    Parent = AvatarContainer
-})
-
--- AVATAR (Foto do jogador)
 local userId = LocalPlayer.UserId
 local thumb = Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
 
-local Avatar = New("ImageLabel", {
-    Size = UDim2.new(1, -10, 1, -10),
-    Position = UDim2.fromOffset(5, 5),
-    BackgroundTransparency = 1,
-    Image = thumb,
-    Parent = AvatarContainer
-})
+local Avatar = Instance.new("ImageLabel")
+Avatar.Size = UDim2.new(1, -10, 1, -10)
+Avatar.Position = UDim2.fromOffset(5, 5)
+Avatar.BackgroundTransparency = 1
+Avatar.Image = thumb
+Avatar.Parent = AvatarContainer
 
-New("UICorner", {
-    CornerRadius = UDim.new(0, 8),
-    Parent = Avatar
-})
+Instance.new("UICorner", Avatar).CornerRadius = UDim.new(0, 8)
 
--- TEXTOS (Alinhados perfeitamente ao lado do avatar)
-local TextContainer = New("Frame", {
-    BackgroundTransparency = 1,
-    Position = UDim2.fromOffset(110, 15),
-    Size = UDim2.new(1, -125, 1, -30),
-    Parent = WarningBox,
-})
+local TextContainer = Instance.new("Frame")
+TextContainer.BackgroundTransparency = 1
+TextContainer.Position = UDim2.fromOffset(110, 15)
+TextContainer.Size = UDim2.new(1, -125, 1, -30)
+TextContainer.Parent = WarningBox
 
--- Título: [Saudação], @Jogador! Welcome To FCX Script
-local Title = New("TextLabel", {
-    BackgroundTransparency = 1,
-    Size = UDim2.new(1, 0, 0, 22),
-    -- Exemplo de resultado: "Good Afternoon, @Player! Welcome To FCX Script"
-    Text = greeting .. ", @" .. LocalPlayer.Name .. "! Welcome To <font color='rgb(200, 80, 255)'>FCX Script</font>",
-    TextColor3 = Color3.fromRGB(255, 255, 255),
-    TextSize = 14, -- Reduzido levemente para 14 caso o nome do jogador + saudação fique muito longo
-    RichText = true, -- Ativa o uso de cores diferentes na mesma string (tags HTML)
-    Font = Enum.Font.GothamBold,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    Parent = TextContainer
-})
+local Title = Instance.new("TextLabel")
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(1, 0, 0, 22)
+Title.Text = greeting .. ", @" .. LocalPlayer.Name .. "! Welcome To FCX Script"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 14
+Title.Font = Enum.Font.GothamBold
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = TextContainer
 
--- Informações / Descrição no formato de lista da foto
-local Desc = New("TextLabel", {
-    BackgroundTransparency = 1,
-    Position = UDim2.fromOffset(0, 25),
-    Size = UDim2.new(1, 0, 1, -25),
-    Text = "• Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n• Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n• Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>",
-    TextColor3 = Color3.fromRGB(180, 180, 180),
-    TextSize = 13,
-    RichText = true,
-    Font = Enum.Font.Gotham,
-    TextWrapped = true,
-    TextXAlignment = Enum.TextXAlignment.Left,
-    TextYAlignment = Enum.TextYAlignment.Top,
-    Parent = TextContainer
-})
+local Desc = Instance.new("TextLabel")
+Desc.BackgroundTransparency = 1
+Desc.Position = UDim2.fromOffset(0, 25)
+Desc.Size = UDim2.new(1, 0, 1, -25)
+Desc.Text = "• Method: Beta Test\n• Support: Elemental Tycoon\n• Future: All Tycoons Autofarm"
+Desc.TextColor3 = Color3.fromRGB(180, 180, 180)
+Desc.TextSize = 13
+Desc.Font = Enum.Font.Gotham
+Desc.TextWrapped = true
+Desc.TextXAlignment = Enum.TextXAlignment.Left
+Desc.TextYAlignment = Enum.TextYAlignment.Top
+Desc.Parent = TextContainer
 
         --// Tab Table \\--
         local Tab = {
