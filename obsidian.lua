@@ -8630,122 +8630,92 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
-    --// Warning/Welcome Box \--
+        --// Warning Box \\--
+        local WarningBoxHolder = New("Frame", {
+            AutomaticSize = Enum.AutomaticSize.Y,
+            BackgroundTransparency = 1,
+            Position = UDim2.fromOffset(0, 7),
+            Size = UDim2.fromScale(1, 0),
+            Visible = false,
+            Parent = TabContainer,
+        })
 
-    local Players = game:GetService("Players")
-    local LocalPlayer = Players.LocalPlayer
+        local WarningBox
+        local WarningBoxOutline
+        local WarningBoxShadowOutline
+        local WarningBoxScrollingFrame
+        local WarningTitle
+        local WarningStroke
+        local WarningText
+        do
+            WarningBox = New("Frame", {
+                BackgroundColor3 = "BackgroundColor",
+                Position = UDim2.fromOffset(2, 0),
+                Size = UDim2.new(1, -5, 0, 0),
+                Parent = WarningBoxHolder,
+            })
+            table.insert(
+                Library.Corners,
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+                    Parent = WarningBox,
+                })
+            )
+            WarningBoxOutline, WarningBoxShadowOutline = Library:AddOutline(WarningBox)
 
-    -- Sistema de Saudação Baseado no Horário Local
-    local currentHour = os.date("*t").hour
-    local greeting = "Good Evening"
+            WarningBoxScrollingFrame = New("ScrollingFrame", {
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                Size = UDim2.fromScale(1, 1),
+                CanvasSize = UDim2.new(0, 0, 0, 0),
+                ScrollBarThickness = 3,
+                ScrollingDirection = Enum.ScrollingDirection.Y,
+                Parent = WarningBox,
+            })
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 4),
+                PaddingLeft = UDim.new(0, 6),
+                PaddingRight = UDim.new(0, 6),
+                PaddingTop = UDim.new(0, 4),
+                Parent = WarningBoxScrollingFrame,
+            })
 
-    if currentHour >= 5 and currentHour < 12 then
-        greeting = "Good Morning"
-    elseif currentHour >= 12 and currentHour < 18 then
-        greeting = "Good Afternoon"
-    end
+            WarningTitle = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, -4, 0, 14),
+                Text = "",
+                TextColor3 = Color3.fromRGB(255, 50, 50),
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Parent = WarningBoxScrollingFrame,
+            })
 
-    local WarningBoxHolder = New("Frame", {
-        AutomaticSize = Enum.AutomaticSize.Y,
-        BackgroundTransparency = 1,
-        Position = UDim2.fromOffset(0, 7),
-        Size = UDim2.fromScale(1, 0),
-        Visible = true,
-        Parent = TabContainer,
-    })
+            WarningStroke = New("UIStroke", {
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+                Color = Color3.fromRGB(169, 0, 0),
+                LineJoinMode = Enum.LineJoinMode.Miter,
+                Parent = WarningTitle,
+            })
 
-    local WarningBox = New("Frame", {
-        BackgroundColor3 = Color3.fromRGB(15, 15, 15),
-        Position = UDim2.fromOffset(2, 0),
-        Size = UDim2.new(1, -5, 0, 110),
-        Parent = WarningBoxHolder,
-    })
+            WarningText = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Position = UDim2.fromOffset(0, 16),
+                Size = UDim2.new(1, -4, 0, 0),
+                Text = "",
+                TextSize = 14,
+                TextWrapped = true,
+                Parent = WarningBoxScrollingFrame,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                TextYAlignment = Enum.TextYAlignment.Top,
+            })
 
-    New("UICorner", {
-        CornerRadius = UDim.new(0, 10),
-        Parent = WarningBox,
-    })
-
-    New("UIStroke", {
-        Thickness = 1,
-        Color = Color3.fromRGB(30, 30, 30),
-        Parent = WarningBox
-    })
-
-    -- CONTAINER DO AVATAR
-    local AvatarContainer = New("Frame", {
-        BackgroundColor3 = Color3.fromRGB(22, 22, 22),
-        Position = UDim2.fromOffset(15, 15),
-        Size = UDim2.fromOffset(80, 80),
-        Parent = WarningBox,
-    })
-
-    New("UICorner", {
-        CornerRadius = UDim.new(0, 12),
-        Parent = AvatarContainer,
-    })
-
-    New("UIStroke", {
-        Thickness = 1,
-        Color = Color3.fromRGB(45, 45, 45),
-        Parent = AvatarContainer
-    })
-
-    -- AVATAR
-    local userId = LocalPlayer.UserId
-    local thumb = Players:GetUserThumbnailAsync(
-        userId,
-        Enum.ThumbnailType.HeadShot,
-        Enum.ThumbnailSize.Size100x100
-    )
-
-    local Avatar = New("ImageLabel", {
-        Size = UDim2.new(1, -10, 1, -10),
-        Position = UDim2.fromOffset(5, 5),
-        BackgroundTransparency = 1,
-        Image = thumb,
-        Parent = AvatarContainer
-    })
-
-    New("UICorner", {
-        CornerRadius = UDim.new(0, 8),
-        Parent = Avatar
-    })
-
-    -- TEXTOS
-    local TextContainer = New("Frame", {
-        BackgroundTransparency = 1,
-        Position = UDim2.fromOffset(110, 15),
-        Size = UDim2.new(1, -125, 1, -30),
-        Parent = WarningBox,
-    })
-
-    local Title = New("TextLabel", {
-        BackgroundTransparency = 1,
-        Size = UDim2.new(1, 0, 0, 22),
-        Text = greeting .. ", @" .. LocalPlayer.Name .. "! Welcome To <font color='rgb(200, 80, 255)'>FCX Script</font>",
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        TextSize = 14,
-        RichText = true,
-        Font = Enum.Font.GothamBold,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        Parent = TextContainer
-    })
-
-    local Desc = New("TextLabel", {
-        BackgroundTransparency = 1,
-        Position = UDim2.fromOffset(0, 25),
-        Size = UDim2.new(1, 0, 1, -25),
-        Text = "• Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n• Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n• Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>",
-        TextColor3 = Color3.fromRGB(180, 180, 180),
-        TextSize = 13,
-        RichText = true,
-        Font = Enum.Font.Gotham,
-        TextWrapped = true,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        TextYAlignment = Enum.TextYAlignment.Top,
-        Parent = TextContainer
-    })
+            New("UIStroke", {
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+                Color = "DarkColor",
+                LineJoinMode = Enum.LineJoinMode.Miter,
+                Parent = WarningText,
+            })
+        end
 
         --// Tab Table \\--
         local Tab = {
