@@ -1779,9 +1779,10 @@ function Library:AddDraggableLabel(...)
     }
 
     local IconImage
+
     local Label = New("TextLabel", {
         AutomaticSize = Enum.AutomaticSize.XY,
-        BackgroundColor3 = "BackgroundColor",
+        BackgroundColor3 = Color3.fromRGB(125, 85, 255),
         Size = UDim2.fromOffset(0, 0),
         Position = UDim2.fromOffset(6, 6),
         Text = Text,
