@@ -316,7 +316,7 @@ local Templates = {
         Footer = "No Footer",
 
         Position = UDim2.fromOffset(6, 6),
-        Size = UDim2.fromOffset(650, 589),
+        Size = UDim2.fromOffset(650, 616),
         IconSize = UDim2.fromOffset(30, 30),
 
         AutoShow = true,
@@ -10434,8 +10434,13 @@ function Library:CreateWindow(WindowInfo)
     end
 
     if Library.IsMobile then
-        local ToggleButton = Library:AddDraggableButton("Menu", function()
+        local ToggleButton = Library:AddDraggableButton("Toggle", function()
             Library:Toggle()
+        end, true, true)
+
+        local LockButton = Library:AddDraggableButton("Lock", function(self)
+            Library.CantDragForced = not Library.CantDragForced
+            self:SetText(Library.CantDragForced and "Unlock" or "Lock")
         end, true, true)
 
         if WindowInfo.MobileButtonsSide == "Right" then
