@@ -316,7 +316,7 @@ local Templates = {
         Footer = "No Footer",
 
         Position = UDim2.fromOffset(6, 6),
-        Size = UDim2.fromOffset(650, 600),
+        Size = UDim2.fromOffset(650, 589),
         IconSize = UDim2.fromOffset(30, 30),
 
         AutoShow = true,
@@ -1779,10 +1779,9 @@ function Library:AddDraggableLabel(...)
     }
 
     local IconImage
-
     local Label = New("TextLabel", {
         AutomaticSize = Enum.AutomaticSize.XY,
-        BackgroundColor3 = Color3.fromRGB(125, 85, 255),
+        BackgroundColor3 = "BackgroundColor",
         Size = UDim2.fromOffset(0, 0),
         Position = UDim2.fromOffset(6, 6),
         Text = Text,
@@ -10434,14 +10433,9 @@ function Library:CreateWindow(WindowInfo)
         task.spawn(Library.Toggle)
     end
 
-if Library.IsMobile then  
-    local ToggleButton = Library:AddDraggableButton("Toggle", function()  
-        Library:Toggle()  
-    end, true, true)
-
-        local LockButton = Library:AddDraggableButton("Lock", function(self)
-            Library.CantDragForced = not Library.CantDragForced
-            self:SetText(Library.CantDragForced and "Unlock" or "Lock")
+    if Library.IsMobile then
+        local ToggleButton = Library:AddDraggableButton("Menu", function()
+            Library:Toggle()
         end, true, true)
 
         if WindowInfo.MobileButtonsSide == "Right" then
