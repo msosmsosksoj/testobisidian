@@ -8630,82 +8630,122 @@ function Library:CreateWindow(WindowInfo)
             end
         end
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+    --// Warning/Welcome Box \--
 
-local currentHour = os.date("*t").hour
-local greeting = "Good Evening"
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
 
-if currentHour >= 5 and currentHour < 12 then
-    greeting = "Good Morning"
-elseif currentHour >= 12 and currentHour < 18 then
-    greeting = "Good Afternoon"
-end
+    -- Sistema de Saudação Baseado no Horário Local
+    local currentHour = os.date("*t").hour
+    local greeting = "Good Evening"
 
-local WelcomeGroup = Tabs.Main:AddLeftGroupbox("Welcome", "sparkles")
+    if currentHour >= 5 and currentHour < 12 then
+        greeting = "Good Morning"
+    elseif currentHour >= 12 and currentHour < 18 then
+        greeting = "Good Afternoon"
+    end
 
-local WarningBox = Instance.new("Frame")
-WarningBox.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-WarningBox.Size = UDim2.new(1, 0, 0, 110)
-WarningBox.Parent = WelcomeGroup.UIElements or WelcomeGroup
+    local WarningBoxHolder = New("Frame", {
+        AutomaticSize = Enum.AutomaticSize.Y,
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(0, 7),
+        Size = UDim2.fromScale(1, 0),
+        Visible = true,
+        Parent = TabContainer,
+    })
 
-local Corner = Instance.new("UICorner")
-Corner.CornerRadius = UDim.new(0, 10)
-Corner.Parent = WarningBox
+    local WarningBox = New("Frame", {
+        BackgroundColor3 = Color3.fromRGB(15, 15, 15),
+        Position = UDim2.fromOffset(2, 0),
+        Size = UDim2.new(1, -5, 0, 110),
+        Parent = WarningBoxHolder,
+    })
 
-local Stroke = Instance.new("UIStroke")
-Stroke.Thickness = 1
-Stroke.Color = Color3.fromRGB(30, 30, 30)
-Stroke.Parent = WarningBox
+    New("UICorner", {
+        CornerRadius = UDim.new(0, 10),
+        Parent = WarningBox,
+    })
 
-local AvatarContainer = Instance.new("Frame")
-AvatarContainer.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
-AvatarContainer.Position = UDim2.fromOffset(15, 15)
-AvatarContainer.Size = UDim2.fromOffset(80, 80)
-AvatarContainer.Parent = WarningBox
+    New("UIStroke", {
+        Thickness = 1,
+        Color = Color3.fromRGB(30, 30, 30),
+        Parent = WarningBox
+    })
 
-Instance.new("UICorner", AvatarContainer).CornerRadius = UDim.new(0, 12)
+    -- CONTAINER DO AVATAR
+    local AvatarContainer = New("Frame", {
+        BackgroundColor3 = Color3.fromRGB(22, 22, 22),
+        Position = UDim2.fromOffset(15, 15),
+        Size = UDim2.fromOffset(80, 80),
+        Parent = WarningBox,
+    })
 
-local userId = LocalPlayer.UserId
-local thumb = Players:GetUserThumbnailAsync(userId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+    New("UICorner", {
+        CornerRadius = UDim.new(0, 12),
+        Parent = AvatarContainer,
+    })
 
-local Avatar = Instance.new("ImageLabel")
-Avatar.Size = UDim2.new(1, -10, 1, -10)
-Avatar.Position = UDim2.fromOffset(5, 5)
-Avatar.BackgroundTransparency = 1
-Avatar.Image = thumb
-Avatar.Parent = AvatarContainer
+    New("UIStroke", {
+        Thickness = 1,
+        Color = Color3.fromRGB(45, 45, 45),
+        Parent = AvatarContainer
+    })
 
-Instance.new("UICorner", Avatar).CornerRadius = UDim.new(0, 8)
+    -- AVATAR
+    local userId = LocalPlayer.UserId
+    local thumb = Players:GetUserThumbnailAsync(
+        userId,
+        Enum.ThumbnailType.HeadShot,
+        Enum.ThumbnailSize.Size100x100
+    )
 
-local TextContainer = Instance.new("Frame")
-TextContainer.BackgroundTransparency = 1
-TextContainer.Position = UDim2.fromOffset(110, 15)
-TextContainer.Size = UDim2.new(1, -125, 1, -30)
-TextContainer.Parent = WarningBox
+    local Avatar = New("ImageLabel", {
+        Size = UDim2.new(1, -10, 1, -10),
+        Position = UDim2.fromOffset(5, 5),
+        BackgroundTransparency = 1,
+        Image = thumb,
+        Parent = AvatarContainer
+    })
 
-local Title = Instance.new("TextLabel")
-Title.BackgroundTransparency = 1
-Title.Size = UDim2.new(1, 0, 0, 22)
-Title.Text = greeting .. ", @" .. LocalPlayer.Name .. "! Welcome To FCX Script"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 14
-Title.Font = Enum.Font.GothamBold
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Parent = TextContainer
+    New("UICorner", {
+        CornerRadius = UDim.new(0, 8),
+        Parent = Avatar
+    })
 
-local Desc = Instance.new("TextLabel")
-Desc.BackgroundTransparency = 1
-Desc.Position = UDim2.fromOffset(0, 25)
-Desc.Size = UDim2.new(1, 0, 1, -25)
-Desc.Text = "• Method: Beta Test\n• Support: Elemental Tycoon\n• Future: All Tycoons Autofarm"
-Desc.TextColor3 = Color3.fromRGB(180, 180, 180)
-Desc.TextSize = 13
-Desc.Font = Enum.Font.Gotham
-Desc.TextWrapped = true
-Desc.TextXAlignment = Enum.TextXAlignment.Left
-Desc.TextYAlignment = Enum.TextYAlignment.Top
-Desc.Parent = TextContainer
+    -- TEXTOS
+    local TextContainer = New("Frame", {
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(110, 15),
+        Size = UDim2.new(1, -125, 1, -30),
+        Parent = WarningBox,
+    })
+
+    local Title = New("TextLabel", {
+        BackgroundTransparency = 1,
+        Size = UDim2.new(1, 0, 0, 22),
+        Text = greeting .. ", @" .. LocalPlayer.Name .. "! Welcome To <font color='rgb(200, 80, 255)'>FCX Script</font>",
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        TextSize = 14,
+        RichText = true,
+        Font = Enum.Font.GothamBold,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Parent = TextContainer
+    })
+
+    local Desc = New("TextLabel", {
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(0, 25),
+        Size = UDim2.new(1, 0, 1, -25),
+        Text = "• Method: <font color='rgb(200, 80, 255)'>Beta Test</font>\n• Support: <font color='rgb(200, 80, 255)'>Elemental Tycoon</font>\n• Future: <font color='rgb(200, 80, 255)'>All Tycoons Autofarm</font>",
+        TextColor3 = Color3.fromRGB(180, 180, 180),
+        TextSize = 13,
+        RichText = true,
+        Font = Enum.Font.Gotham,
+        TextWrapped = true,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Top,
+        Parent = TextContainer
+    })
 
         --// Tab Table \\--
         local Tab = {
